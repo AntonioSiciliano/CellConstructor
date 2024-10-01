@@ -1987,16 +1987,15 @@ class Phonons:
 
         # Remove translations
         trans_mask = Methods.get_translations(pol_vects, super_structure.get_masses_array())
-
+        
         # Exclude also other w = 0 modes
         if lock_low_w:
             locked_original = np.abs(ws) < __EPSILON_W__
             if np.sum(locked_original.astype(int)) > np.sum(trans_mask.astype(int)):
                 trans_mask = locked_original
-
+        
         ws = ws[~trans_mask]
         pol_vects = pol_vects[:, ~trans_mask]
-
         nat = self.structure.N_atoms * np.prod(self.GetSupercell())
 
         # Check that the matrix is positive definite
@@ -3705,11 +3704,20 @@ WARNING: Effective charges are not accounted by this method
         w_array = w_array[sort_mask]
         e_pols_sc = e_pols_sc[:, sort_mask]
 
-
-        # Get the check for the polarization vector normalization
+        # print('DIAGONALIZE SUPERCELL')
+        # for i in range(len(w_array)):
+        #     print('w={} pol={}'.format(w_array[i], e_pols_sc[:,i]))
+        # print()
+        # print(np.einsum("ab, ab->b", e_pols_sc, e_pols_sc))
         assert np.max(np.abs(np.einsum("ab, ab->b", e_pols_sc, e_pols_sc) - 1)) < __EPSILON__
 
         return w_array, e_pols_sc
+    
+    
+    
+    
+    
+
 
 
 

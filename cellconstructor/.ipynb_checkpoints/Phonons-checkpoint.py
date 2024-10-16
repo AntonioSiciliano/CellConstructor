@@ -3490,8 +3490,12 @@ WARNING: Effective charges are not accounted by this method
             e_mu : ndarray( size = (3*Nat_sc, n_modes), dtype = np.double, order = "F")
                 Polarization vectors in the supercell
         """
-
         supercell_size = len(self.q_tot)
+        # TODO try to fix this
+        # This is for a cavity calculation where the averag atomic and photon position is equal!
+        if supercell_size == 1 and lo_to_split is None:
+            w, pols = self.DyagDinQ(0)
+            return w, pols
         nat = self.structure.N_atoms
 
         nmodes = 3*nat*supercell_size
